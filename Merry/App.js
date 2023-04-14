@@ -134,7 +134,7 @@ const Tab = createBottomTabNavigator();
           }}
         />
         <Tab.Screen
-          name="Profile"
+          name="Profile1"
           component={EditProfileStackScreen}
           options={{
             tabBarLabel: 'Profile',
