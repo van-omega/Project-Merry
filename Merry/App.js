@@ -5,8 +5,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
+import { TextInput } from 'react-native';
+import Profile from './screens/Profile'
 
 function Feed() {
   const [position, setPosition] = useState({
@@ -15,6 +17,15 @@ function Feed() {
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
   });
+
+  const onRegionChange = region => {
+    setPosition({
+      latitude: region.latitude,
+      longitude: region.longitude,
+      latitudeDelta: region.latitudeDelta,
+      longitudeDelta: region.longitudeDelta,
+    })
+  }
 
   useEffect(() => {
       (async () => {
@@ -35,11 +46,21 @@ function Feed() {
 
   return (
     <SafeAreaView style={style.AndroidSafeArea}>
+        <TextInput
+          placeholder='Enter Location'
+        />
         <MapView 
           style={{width:'100%', height:'100%'}}
           initialRegion={position}
           region={position}
-        >
+          onRegionChangeComplete={onRegionChange}>
+          <Marker 
+            coordinate={{
+              latitude: position.latitude, 
+              longitude: position.longitude
+            }} 
+            tracksViewChanges={true}>
+          </Marker>
         </MapView>
     </SafeAreaView>
   );
@@ -64,13 +85,7 @@ function Notifications() {
 
 function ProfileScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Profile screen!</Text>
-      <Button
-        title="Edit Profile"
-        onPress={() => navigation.navigate('Details')}
-      />
-    </View>
+    <Profile />
   );
 }
 
